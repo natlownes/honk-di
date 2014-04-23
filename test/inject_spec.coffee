@@ -8,6 +8,10 @@ class SomeSingleton
   constructor: ->
     @name = 'singleton!'
 
+class BarfyTheScorpion
+  constructor: ->
+    throw new Error('skate workshop!')
+
 
 describe 'Inject', ->
   it 'should inject requried fields', ->
@@ -89,3 +93,13 @@ describe 'Inject', ->
 
       expect(create).to.throw /Cannot inject undefined/
 
+  describe 'when injecting where a constructor throws an error', ->
+
+    it 'should raise that error', ->
+      class TheDesert
+        barfy: inject BarfyTheScorpion
+
+      injector = new Injector
+      operation = -> injector.getInstance(TheDesert)
+
+      expect(operation).to.throw 'skate workshop!'

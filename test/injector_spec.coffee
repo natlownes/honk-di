@@ -22,6 +22,11 @@ class MySingleton
 class MyParamed
   constructor: (@name, @age) ->
 
+class BarfyTheScorpion
+  constructor: ->
+    throw new Error('skate workshop!')
+
+
 describe 'An injector', ->
   it 'should create an instance', ->
     injector = new Injector()
@@ -90,3 +95,13 @@ describe 'An injector', ->
     injector = new Injector()
     injector.someNewField = 3
     expect(injector.getInstance(Injector).someNewField).to.equal 3
+
+  context 'when a constructor throws an Error', ->
+
+    it 'should raise that error', ->
+      injector = new Injector
+
+      operation = ->
+        injector.getInstance BarfyTheScorpion
+
+      expect(operation).to.throw 'skate workshop!'
